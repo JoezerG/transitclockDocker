@@ -1,34 +1,39 @@
-# transitime-docker
+# TransitTime Docker
 
-Things to make transitime go:
+## Requirements
 
-- Ubuntu
-- sudo apt-get install git
-- git clone https://github.com/scrudden/transitime-docker.git
-- curl -sSL https://get.docker.com/ | sh  (i.e. install docker)
-- Configure agency details in the go.sh script. Here you set the agency name, agency id** (as in GTFS feed), GTFS feed location and GTFS-realtime vehicle location url.
-- ./go.sh
+- Docker
+- GTFS-RT buffer endpoint
+- GTFS static file per agency on a URL
+- Postgres (9.6) database instance running
 
-**AgencyId is optional in GTFS so just set to 1 if none specified.
+## Configuring
 
-The go script will build the transitime container (takes a long time), start the postgres db, create the tables,
-push the gtfs data into the db, create an API key and then start the api service and web user interface service. 
+### 1. Set enviroments values
 
-To view web interface
+Set the enviroments values on .env file
+
 ```
-http://[ipaddress]:8080/web
-```
-To view api
-```
-http://[ipaddress]:8080/api
+PGPASSWORD=muufTransit.
+GTFSRTVEHICLEPOSITIONS=http://10.10.80.53:3001/gtfsrealtime
+GTFSSTATICFILE=http://10.10.80.53:8000
 ```
 
-You can get the ip address by running
+### 2. Build server instance image
+
+```bash
+$ docker build build --no-cache -t transitclock-muuf:{agencyName}-{dateGeneration} \
+--build-arg TRANSITCLOCK_PROPERTIES="config/transitclock.properties" \
+--build-arg AGENCYID="93" \
+--build-arg AGENCYNAME="TIOENVIGADO" \
+--build-arg GTFS_URL="$GTFSSTATICFILE/gtfs_tio_envigado.zip" \
+--build-arg GTFSRTVEHICLEPOSITIONS="$GTFSRTVEHICLEPOSITIONS/93" .
 ```
-docker-machine ip [machine name]
 
-docker-machine ip default
+### 3. Add the image server to docker-compose
+
+Add the service with the server image to do docker-compose.yaml
+
+```yaml
+
 ```
-
-
-
