@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PGPASSWORD=transitclock
+# export PGPASSWORD=transitclock
 
 echo 'THETRANSITCLOCK DOCKER: Check if database is runnng.'
 RET=1
