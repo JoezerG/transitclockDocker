@@ -15,3 +15,39 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_PASSWORD=${PGPASSWORD}
+  tt-tioenvigado:
+    image: transitclock-muuf:02052023
+    container_name: tt-tioenvigado
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    volumes:
+      - ./logs/tt-tioenvigado:/usr/local/transitclock/logs/
+      - ./ehcache/tt-tioenvigado:/usr/local/transitclock/cache/
+    environment:
+      - PGPASSWORD=${PGPASSWORD}
+      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
+      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - AGENCYNAME=tioengivado
+      - AGENCYID=93
+      - GTFS_URL=${GTFSSTATICFILE}/gtfs_tio_envigado.zip
+      - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/93
+    command: start_transitclock.sh
+  tt-combuses:
+    image: transitclock-muuf:02052023
+    container_name: tt-combuses
+    restart: unless-stopped
+    ports:
+      - 8082:8080
+    volumes:
+      - ./logs/tt-combuses:/usr/local/transitclock/logs/
+      - ./ehcache/tt-combuses:/usr/local/transitclock/cache/
+    environment:
+      - PGPASSWORD=${PGPASSWORD}
+      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
+      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - AGENCYNAME=combuses
+      - AGENCYID=173
+      - GTFS_URL=${GTFSSTATICFILE}/gtfs_combuses.zip
+      - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/173
+    command: start_transitclock.sh
