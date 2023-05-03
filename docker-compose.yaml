@@ -51,3 +51,21 @@ services:
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_combuses.zip
       - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/173
     command: start_transitclock.sh
+  tt-sotrames:
+    image: transitclock-muuf:02052023
+    container_name: tt-sotrames
+    restart: unless-stopped
+    ports:
+      - 8083:8080
+    volumes:
+      - ./logs/tt-sotrames:/usr/local/transitclock/logs/
+      - ./ehcache/tt-sotrames:/usr/local/transitclock/cache/
+    environment:
+      - PGPASSWORD=${PGPASSWORD}
+      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
+      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - AGENCYNAME=sotrames
+      - AGENCYID=95
+      - GTFS_URL=${GTFSSTATICFILE}/gtfs_sotrames.zip
+      - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/95
+    command: start_transitclock.sh
