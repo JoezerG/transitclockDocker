@@ -69,3 +69,21 @@ services:
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_sotrames.zip
       - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/95
     command: start_transitclock.sh
+  tt-autobuses_p:
+    image: transitclock-muuf:02052023
+    container_name: tt-autobuses_p
+    restart: unless-stopped
+    ports:
+      - 8084:8080
+    volumes:
+      - ./logs/tt-autobuses_p:/usr/local/transitclock/logs/
+      - ./ehcache/tt-autobuses_p:/usr/local/transitclock/cache/
+    environment:
+      - PGPASSWORD=${PGPASSWORD}
+      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
+      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - AGENCYNAME=autobuses_p
+      - AGENCYID=85
+      - GTFS_URL=${GTFSSTATICFILE}/gtfs_autobuses_el_poblado_laureles.zip
+      - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/85
+    command: start_transitclock.sh
