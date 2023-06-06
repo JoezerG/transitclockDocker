@@ -31,7 +31,7 @@ services:
       - MYSQL_PWD=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
-      - AGENCYNAME=tioengivado
+      - AGENCYNAME=tioenvigado
       - AGENCYID=93
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_tio_envigado.zip
       - GTFSRTVEHICLEPOSITIONS=${GTFSRTVEHICLEPOSITIONS}/93
