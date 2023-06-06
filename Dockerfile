@@ -1,4 +1,4 @@
-FROM maven:3.6-jdk-8
+FROM maven:3.8.6-openjdk-8
 LABEL name="Joezer Gullo" email="joezerg@muuf.app" company="muuf" companyweb="https://muuf.app"
 
 ARG AGENCYID="1"
@@ -16,9 +16,10 @@ ENV TRANSITCLOCK_PROPERTIES ${TRANSITCLOCK_PROPERTIES}
 ENV TRANSITCLOCK_CORE /transitclock-core
 
 RUN apt-get update \
-	&& apt-get install -y postgresql-client \
+	&& apt-get install -y mariadb-client \
 	&& apt-get install -y git-core \
-	&& apt-get install -y vim
+	&& apt-get install -y vim \
+	&& apt-get install -y jq
 
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
@@ -36,15 +37,6 @@ RUN set -x \
 	&& rm tomcat.tar.gz*
 
 EXPOSE 8080
-
-
-# Install json parser so we can read API key for CreateAPIKey output
-
-RUN wget http://stedolan.github.io/jq/download/linux64/jq
-
-RUN chmod +x ./jq
-
-RUN cp jq /usr/bin/
 
 WORKDIR /
 RUN mkdir /usr/local/transitclock
@@ -97,7 +89,7 @@ RUN \
 	sed -i 's/\r//' /usr/local/transitclock/bin/*.sh &&\
  	chmod 777 /usr/local/transitclock/bin/*.sh
 
-ADD config/postgres_hibernate.cfg.xml /usr/local/transitclock/config/hibernate.cfg.xml
+ADD config/mysql_hibernate.cfg.xml /usr/local/transitclock/config/hibernate.cfg.xml
 ADD ${TRANSITCLOCK_PROPERTIES} /usr/local/transitclock/config/transitclock.properties
 
 # This adds the transitime configs to test.
