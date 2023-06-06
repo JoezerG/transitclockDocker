@@ -1,22 +1,21 @@
 version: "3"
 
 volumes:
-  posgtgresvol:
+  mariadbvol:
 
 services:
   transticlock-db:
-    image: postgres:9.6
+    image: mariadb:10
     container_name: transticlock-db
     restart: unless-stopped
     ports:
-      - 5432:5432
+      - 3336:3306
     volumes:
-      - posgtgresvol:/var/lib/postgresql/data
+      - mariadbvol:/var/lib/mysql
     environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - MARIADB_ROOT_PASSWORD=${DB_PASS}
   tt-tioenvigado:
-    image: transitclock-muuf:02052023
+    image: transitclock-muuf:06052023-5
     container_name: tt-tioenvigado
     restart: unless-stopped
     ports:
@@ -24,10 +23,14 @@ services:
     volumes:
       - ./logs/tt-tioenvigado:/usr/local/transitclock/logs/
       - ./ehcache/tt-tioenvigado:/usr/local/transitclock/cache/
+      # - ./bin:/usr/local/transitclock/bin/
+      # - ./config/transitclock.properties:/usr/local/transitclock/config/transitclock.properties
+      # - ./config/postgres_hibernate.cfg.xml:/usr/local/transitclock/config/hibernate.cfg.xml
     environment:
-      - PGPASSWORD=${PGPASSWORD}
-      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
-      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - DB_USER=${DB_USER}
+      - MYSQL_PWD=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - AGENCYNAME=tioengivado
       - AGENCYID=93
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_tio_envigado.zip
@@ -43,9 +46,10 @@ services:
       - ./logs/tt-combuses:/usr/local/transitclock/logs/
       - ./ehcache/tt-combuses:/usr/local/transitclock/cache/
     environment:
-      - PGPASSWORD=${PGPASSWORD}
-      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
-      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - DB_USER=${DB_USER}
+      - MYSQL_PWD=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - AGENCYNAME=combuses
       - AGENCYID=173
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_combuses.zip
@@ -61,9 +65,10 @@ services:
       - ./logs/tt-sotrames:/usr/local/transitclock/logs/
       - ./ehcache/tt-sotrames:/usr/local/transitclock/cache/
     environment:
-      - PGPASSWORD=${PGPASSWORD}
-      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
-      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - DB_USER=${DB_USER}
+      - MYSQL_PWD=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - AGENCYNAME=sotrames
       - AGENCYID=95
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_sotrames.zip
@@ -79,9 +84,10 @@ services:
       - ./logs/tt-autobuses_p:/usr/local/transitclock/logs/
       - ./ehcache/tt-autobuses_p:/usr/local/transitclock/cache/
     environment:
-      - PGPASSWORD=${PGPASSWORD}
-      - POSTGRES_PORT_5432_TCP_ADDR=10.10.80.53
-      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - DB_USER=${DB_USER}
+      - MYSQL_PWD=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - AGENCYNAME=autobuses_p
       - AGENCYID=85
       - GTFS_URL=${GTFSSTATICFILE}/gtfs_autobuses_el_poblado_laureles.zip
