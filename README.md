@@ -14,7 +14,7 @@
 Set the enviroments values on .env file
 
 ```
-PGPASSWORD=muufTransit.
+MYSQL_PWD=muufTransit.
 GTFSRTVEHICLEPOSITIONS=http://10.10.80.53:3001/gtfsrealtime
 GTFSSTATICFILE=http://10.10.80.53:8000
 ```
@@ -42,9 +42,10 @@ tt-companyName:
     - ./logs/tt-companyName:/usr/local/transitclock/logs/
     - ./ehcache/tt-companyName:/usr/local/transitclock/cache/
   environment:
-    - PGPASSWORD=${PGPASSWORD}
-    - POSTGRES_PORT_5432_TCP_ADDR=${PGHOST}
-    - POSTGRES_PORT_5432_TCP_PORT=${PGPORT}
+    - DB_USER=${DB_USER}
+    - MYSQL_PWD=${DB_PASS}
+    - DB_HOST=${DB_HOST}
+    - DB_PORT=${DB_PORT}
     - AGENCYNAME=agencyname
     - AGENCYID=93 #ID of the agency on the static GTFS
     - GTFS_URL=${GTFSSTATICFILE}/gtfs_tio_envigado.zip # static gtfs url
