@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# export PGPASSWORD=transitclock
+# export MYSQL_PWD=$muufTransit.
 
 echo 'THETRANSITCLOCK DOCKER: Check if database is runnng.'
 RET=1
 SUCCESS=0
 until [ "$RET" -eq "$SUCCESS" ]; do
-
-	psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres -c "SELECT EXTRACT(DAY FROM TIMESTAMP '2001-02-16 20:38:40');"
+	
+	mariadb --host "$DB_HOST" --port "$DB_PORT" --user "$DB_USER" --execute "SELECT EXTRACT(DAY FROM TIMESTAMP '2001-02-16 20:38:40');"
 	RET="$?"
 
 	if [ "$RET" -ne "$SUCCESS" ]

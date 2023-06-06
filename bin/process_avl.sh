@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 echo 'THETRANSITCLOCK DOCKER: Process test AVL.'
 # This is to substitute into config file the env values.
-find /usr/local/transitclock/config/ -type f -exec sed -i s#"POSTGRES_PORT_5432_TCP_ADDR"#"$POSTGRES_PORT_5432_TCP_ADDR"#g {} \;
-find /usr/local/transitclock/config/ -type f -exec sed -i s#"POSTGRES_PORT_5432_TCP_PORT"#"$POSTGRES_PORT_5432_TCP_PORT"#g {} \;
-find /usr/local/transitclock/config/ -type f -exec sed -i s#"PGPASSWORD"#"$PGPASSWORD"#g {} \;
+find /usr/local/transitclock/config/ -type f -exec sed -i s#"DB_HOST"#"$DB_HOST"#g {} \;
+find /usr/local/transitclock/config/ -type f -exec sed -i s#"DB_PORT"#"$DB_PORT"#g {} \;
+find /usr/local/transitclock/config/ -type f -exec sed -i s#"DB_USER"#"$DB_USER"#g {} \;
+find /usr/local/transitclock/config/ -type f -exec sed -i s#"DB_PASS"#"$MYSQL_PWD"#g {} \;
 find /usr/local/transitclock/config/ -type f -exec sed -i s#"AGENCYNAME"#"$AGENCYNAME"#g {} \;
 find /usr/local/transitclock/config/ -type f -exec sed -i s#"GTFSRTVEHICLEPOSITIONS"#"$GTFSRTVEHICLEPOSITIONS"#g {} \;
 
 
-psql \
-	-h "$POSTGRES_PORT_5432_TCP_ADDR" \
-	-p "$POSTGRES_PORT_5432_TCP_PORT" \
-	-U postgres \
-	-d $AGENCYNAME \
-	-c "SELECT distinct time::date as thedate FROM public.avlreports order by thedate;"
+mariadb \
+	--host "$DB_HOST" \
+	--port "$DB_PORT" \
+	--user "$DB_USER" \
+	--database $AGENCYNAME \
+	-e "SELECT distinct time::date as thedate FROM public.avlreports order by thedate;"
 
-# psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres -d $AGENCYNAME -t -c "SELECT distinct time::date as mydate FROM public.avlreports order by mydate;"|xargs -I {} echo {}
+# psql -h "$DB_HOST" -p "$DB_PORT" -U postgres -d $AGENCYNAME -t -c "SELECT distinct time::date as mydate FROM public.avlreports order by mydate;"|xargs -I {} echo {}
 
 
 # This will process AVL using the set of transitime config files in the test directory.
