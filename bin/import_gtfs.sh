@@ -9,11 +9,11 @@ find /usr/local/transitclock/config/ -type f -exec sed -i s#"AGENCYNAME"#"$AGENC
 find /usr/local/transitclock/config/ -type f -exec sed -i s#"AGENCYID"#"$AGENCYID"#g {} \;
 find /usr/local/transitclock/config/ -type f -exec sed -i s#"GTFSRTVEHICLEPOSITIONS"#"$GTFSRTVEHICLEPOSITIONS"#g {} \;
 
-DATA_EXIST=$(mariadb --host "$DB_HOST" --port "$DB_PORT" --user "$DB_USER" --database "$AGENCYNAME" --execute "SELECT COUNT(*) from ActiveRevisions where configRev = -1;" --batch --skip-column-names)
+DATA_EXIST=$(mariadb --host "$DB_HOST" --port "$DB_PORT" --user "$DB_USER" --database "$AGENCYNAME" --execute "SELECT COUNT(*) FROM Stops;" --batch --skip-column-names)
 
 echo "$DATA_EXIST"
 
-if [ "$DATA_EXIST" -ne 0 ]
+if [ "$DATA_EXIST" -eq 0 ]
 	then
 		echo "GTFS IMPORT"
 		java -Xmx4g -Dtransitclock.core.agencyId=$AGENCYID -Dtransitclock.configFiles=/usr/local/transitclock/config/transitclock.properties -Dtransitclock.logging.dir=/usr/local/transitclock/logs/ -Dlogback.configurationFile=$TRANSITCLOCK_CORE/transitclock/src/main/resouces/logbackGtfs.xml -cp /usr/local/transitclock/Core.jar org.transitclock.applications.GtfsFileProcessor -gtfsUrl $GTFS_URL  -maxTravelTimeSegmentLength 50000.0 -maxDistanceBetweenStops 50000.0 -disableSpecialLoopBackToBeginningCase true
