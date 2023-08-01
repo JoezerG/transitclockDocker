@@ -1,19 +1,19 @@
 version: "3"
 
-volumes:
-  mariadbvol:
+# volumes:
+#   mariadbvol:
 
 services:
-  transticlock-db:
-    image: mariadb:10
-    container_name: transticlock-db
-    restart: unless-stopped
-    ports:
-      - 3336:3306
-    volumes:
-      - mariadbvol:/var/lib/mysql
-    environment:
-      - MARIADB_ROOT_PASSWORD=${DB_PASS}
+  # transticlock-db:
+  #   image: mariadb:10
+  #   container_name: transticlock-db
+  #   restart: unless-stopped
+  #   ports:
+  #     - 3336:3306
+  #   volumes:
+  #     - mariadbvol:/var/lib/mysql
+  #   environment:
+  #     - MARIADB_ROOT_PASSWORD=${DB_PASS}
   tt-tioenvigado:
     image: transitclock-muuf:06052023-5
     container_name: tt-tioenvigado
