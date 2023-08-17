@@ -1,37 +1,67 @@
 # TransitClock Muuf
 
-
-
 ## Problemas:
-El calculo de estimacion de llegadas no da los tiempo esperados.
+El calculo de estimación de llegadas no da los tiempo esperados.
 
 ### Ejemplos
 
 ### 1. Tramo de referencia
-![Estimacion de llamada](./distancia.png)
+![Estimación de llamada](./distancia.png)
 
 
-Tenemos un tramo de 5km (aprox) con un vehiculo en velocidad promedio de 8km segun un calculo de velocidad sobre distancia el tiempo estimado de llegada deberia estar por encima de 37 minutos. 
+Tenemos un tramo de 5km (aprox) con un vehículo en velocidad promedio de 8km según un calculo de velocidad sobre distancia el tiempo estimado de llegada, debería estar por encima de 37 minutos. 
 
 ### 2. Bus de referencia
-![Ubicacion del bus](./estimacion_origen.png)
+![Ubicación del bus](./estimacion_origen.png)
 
-### 3. Prediccion de llegada
-![Estimacion de llamada](./estimacion_destino.png)
-Para el paradero en cuestion podemos ver ver que dice tiempo estimada de llegada 7 minutos.
+### 3. Predicción de llegada
+![Estimación de llamada](./estimacion_destino.png)
+Para el paradero en cuestión podemos ver ver que dice tiempo estimada de llegada 7 minutos.
 
-## Ambiente de ejecucion
-Partiendo del proyecto [TransitTimeDocker](https://github.com/TheTransitClock/transitclockDocker) tenemos una instacia por cada agencia para pruebas corriendo en un contenedor de Docker con la version [untagged-d6fe7b2bebe82bd22e90](https://github.com/TheTransitClock/transitime/releases/tag/untagged-d6fe7b2bebe82bd22e90) del TransitTime.
+## Ambiente de ejecución
+Partiendo del proyecto [TransitTimeDocker](https://github.com/TheTransitClock/transitclockDocker) tenemos una instancia por cada agencia para pruebas corriendo en un contenedor de Docker con la version [untagged-d6fe7b2bebe82bd22e90](https://github.com/TheTransitClock/transitime/releases/tag/untagged-d6fe7b2bebe82bd22e90) del TransitTime.
 
 ## Datos de origen:
 
 Estos son los datos que usamos para alimentar la instancia.
 
-- [GTFS Estatico de la empresa SOTRAMES](https://s3.sonartelematics.com/muuf/gtfs/gtfs_sotrames.zip)
+- [GTFS Estático de la empresa SOTRAMES](https://s3.sonartelematics.com/muuf/gtfs/gtfs_sotrames.zip)
 
 - GTFS-RT Buffer
 
-```
+```json
+{
+	"header": {
+		"gtfsRealtimeVersion": "2.0",
+		"incrementality": "FULL_DATASET",
+		"timestamp": "1686692479512"
+	},
+	"entity": [
+		{
+			"id": "3828",
+			"vehicle": {
+				"trip": {
+					"tripId": "455",
+					"startDate": "20230613",
+					"routeId": "468"
+				},
+				"position": {
+					"latitude": 6.1816182136535645,
+					"longitude": -75.58113861083984,
+					"bearing": 254,
+					"speed": 3.8888888359069824
+				},
+				"timestamp": "1686692457000",
+				"vehicle": {
+					"id": "3828",
+					"label": "EXU987",
+					"licensePlate": "EXU987"
+				}
+			}
+		},
+		...[Todos los vehiculos reportados en esa agencia]
+	]
+}
 ```
 
 ### TransitClock Config file
